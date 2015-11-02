@@ -1,12 +1,27 @@
 <?php
-    //loome AB ühenduse
+    
+	require_once("../config_global.php");
+    require_once("user.class.php");
+	
+	$database = "if15_romil_1";
+	
+	session_start();
+	
+	$mysqli = new mysqli($servername, $server_username, $server_password, $database);
+	
+	$user = new user($mysqli);
+	
+	
+	
+	
+	//loome AB ühenduse
     /*  
         // config_global.php
         $servername = "";
         $server_username = "";
         $server_password = "";
     
-    */
+    
     require_once("../config_global.php");
     $database = "if15_romil_1";
     
@@ -94,7 +109,7 @@
             //saime andmed kätte
             echo $row_nr." ".$number_plate_from_db." <br>";
             $row_nr++;
-        }*/
+        }
         
         // iga rea kohta mis on ab'is teeme midagi
         while($stmt->fetch()){
@@ -106,6 +121,5 @@
         $stmt->close();
         $mysqli->close();
     }
-    
-    
+    */ 
  ?>

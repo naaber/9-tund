@@ -47,7 +47,7 @@
 			
                 $hash = hash("sha512", $password);
                 
-                loginUser($email, $hash);
+                $user->loginUser($email, $hash);
             
             }
 
@@ -82,7 +82,7 @@
                 $hash = hash("sha512", $create_password);
                 
                 //functions.php's funktsioon
-                createUser($create_email, $hash);
+                $user->createUser($create_email, $hash);
                 
                 
             }
