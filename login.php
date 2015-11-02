@@ -47,8 +47,21 @@
 			
                 $hash = hash("sha512", $password);
                 
-                $user->loginUser($email, $hash);
-            
+                $login_response = $user->loginUser($email, $hash);
+				
+				//var_dump($login_response);
+				//echo $login_response->success->user->email;
+				
+				if(isSet($login_response->success)){
+					
+					//sisselogimine õnnestus
+					$_SESSION["user_id"] = $login_response->success->user->id;
+					$_SESSION["user_email"] = $login_response->success->user->email;
+					
+					$_SESSION["login_message"] = $login_response->success->message;
+					
+					header("Location: data.php");	
+				}
             }
 
 		} // login if end
@@ -82,7 +95,7 @@
                 $hash = hash("sha512", $create_password);
                 
                 //functions.php's funktsioon
-                $user->createUser($create_email, $hash);
+                $response = $user->createUser($create_email, $hash);
                 
                 
             }
@@ -108,6 +121,9 @@
 <body>
 
   <h2>Log in</h2>
+  <?php if(isSet($login_response->error)):?>
+  <p style="color:green"><?=$login_response->error->message;?></p>
+  <?php endif;?>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
   	<input name="email" type="email" placeholder="E-post" value="<?php echo $email; ?>"> <?php echo $email_error; ?><br><br>
   	<input name="password" type="password" placeholder="Parool" value="<?php echo $password; ?>"> <?php echo $password_error; ?><br><br>
@@ -115,6 +131,11 @@
   </form>
 
   <h2>Create user</h2>
+  <?php if(isSet($response->success)):?>
+  <p style="color:green"><?=$response->success->message;?></p>
+  <?php elseif(isSet($response->error)):?>
+  <p style="color:red"><?=$response->error->message;?></p>
+  <?php endif;?>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
   	<input name="create_email" type="email" placeholder="E-post" value="<?php echo $create_email; ?>"> <?php echo $create_email_error; ?><br><br>
   	<input name="create_password" type="password" placeholder="Parool"> <?php echo $create_password_error; ?> <br><br>
